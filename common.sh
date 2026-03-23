@@ -9,6 +9,7 @@ Y="\e[33m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
 MONGODB_HOST=mongodb.109v.store
+CATALOGUE_HOST=catalogue.109v.store
 START_TIME=$(date +%s)
 
 
@@ -33,18 +34,25 @@ VALIDATE(){
     fi
 }
 
-nodejs_setup(){
-    dnf module disable nodejs -y &>>$LOGS_FILE
-    VALIDATE $? "Disabling NodeJs default version"
+app_code_setup(){
+    #Installing app_code (nodejs,redis) version
+    dnf module disable $app_code -y &>>$LOGS_FILE
+    VALIDATE $? "Disabling $app_code default version"
 
-    dnf module enable nodejs:20 -y &>>$LOGS_FILE
-    VALIDATE $? "Enabling NodeJs version 20"
+    dnf module enable $app_code:$version -y &>>$LOGS_FILE
+    VALIDATE $? "Enabling $app_code version 20"
 
-    dnf install nodejs -y &>>$LOGS_FILE
-    VALIDATE $? "Installing NodeJs"
+    dnf install $app_code -y &>>$LOGS_FILE
+    VALIDATE $? "Installing $app_code"
 
-    npm install &>>$LOGS_FILE
-    VALIDATE $? "Installing dependencies"
+    id nodejs &>>$LOGS_FILE 
+    if [ $? -ne 0 ]; then
+        npm install &>>$LOGS_FILE
+        VALIDATE $? "Installing dependencies"
+    else
+        echo -e "$(date "+%Y-%m-%d %H:%M:%S") | nodejs already exist .... $Y SKIPPING $N"
+    fi
+
 }
 
 app_setup(){
@@ -54,7 +62,7 @@ app_setup(){
         useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOGS_FILE
         VALIDATE $? "Creating system user"
     else
-        echo -e "Roboshop user already exist .... $Y SKIPPING $N"
+        echo -e "$(date "+%Y-%m-%d %H:%M:%S") | Roboshop user already exist .... $Y SKIPPING $N"
     fi
     #downloading the app
     mkdir -p /app 
@@ -74,7 +82,12 @@ app_setup(){
 
 }
 
-systemd_setup (){
+sed_setup(){
+    sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/$app_name/$app_name.conf &>>$LOGS_FILE
+    VALIDATE $? "Allowing remote connections"
+}
+
+systemd_setup(){
     cp $SCRIPT_DIR/$app_name.service /etc/systemd/system/$app_name.service &>>$LOGS_FILE
     VALIDATE $? "Created systemctl service"
 
@@ -85,7 +98,7 @@ systemd_setup (){
 }
 
 app_restart(){    
-    systemctl restart catalogue
+    systemctl restart catalogue &>>$LOGS_FILE
     VALIDATE $? "Restarting catalogue"
 }
 
