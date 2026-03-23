@@ -10,6 +10,11 @@ N="\e[0m"
 SCRIPT_DIR=$PWD
 MONGODB_HOST=mongodb.109v.store
 CATALOGUE_HOST=catalogue.109v.store
+SHIPPING_HOST=shipping.109v.store
+MYSQL_HOST=mysql.109v.store
+CART_HOST=cart.109v.store
+user_HOST=user.109v.store
+REDIS_HOST=redis.109v.store
 START_TIME=$(date +%s)
 
 
