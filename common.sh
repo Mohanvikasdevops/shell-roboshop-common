@@ -47,7 +47,7 @@ app_code_setup(){
 
     
     if command -v node &>/dev/null; then
-        cd/app
+        cd /app
         npm install &>>$LOGS_FILE
         VALIDATE $? "Installing dependencies"
     else
