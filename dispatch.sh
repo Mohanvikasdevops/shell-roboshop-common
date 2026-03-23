@@ -7,9 +7,6 @@ check_root
 app_setup
 systemd_setup
 
-print_total_time
-
-
 dnf install golang -y &>>$LOGS_FILE
 VALIDATE $? "Installing golang"
  
@@ -19,3 +16,4 @@ go get
 go build &>>$LOGS_FILE
 VALIDATE $? "Installing dependecies"
 
+print_total_time
