@@ -89,6 +89,18 @@ app_setup(){
 
 }
 
+java_setup(){
+    dnf install maven -y &>>$LOGS_FILE
+    VALIDATE $? " Installed Maven"
+
+    cd /app 
+    mvn clean package 
+    VALIDATE $? "Installing and Building $app_name"
+
+    mv target/$app_name-1.0.jar $app_name.jar
+    VALIDATE $? "Moving and Renaming $app_name" 
+}
+
 sed_setup(){
     sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/$app_name/$app_name.conf &>>$LOGS_FILE
     VALIDATE $? "Allowing remote connections"
