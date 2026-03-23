@@ -47,6 +47,7 @@ app_code_setup(){
 
     
     if command -v node &>/dev/null; then
+        cd/app
         npm install &>>$LOGS_FILE
         VALIDATE $? "Installing dependencies"
     else
@@ -92,7 +93,7 @@ systemd_setup(){
         cp $SCRIPT_DIR/$app_name.service /etc/systemd/system/$app_name.service &>>$LOGS_FILE
         VALIDATE $? "Created systemctl service"
     else 
-           echo -e "$(date "+%Y-%m-%d %H:%M:%S") | systemctl services not required  .... $Y SKIPPING $N"
+        echo -e "$(date "+%Y-%m-%d %H:%M:%S") | systemctl services not required  .... $Y SKIPPING $N"
     fi
 
     systemctl daemon-reload
