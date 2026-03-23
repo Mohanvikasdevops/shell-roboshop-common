@@ -50,7 +50,7 @@ app_code_setup(){
         npm install &>>$LOGS_FILE
         VALIDATE $? "Installing dependencies"
     else
-        echo -e "$(date "+%Y-%m-%d %H:%M:%S") | nodejs already exist .... $Y SKIPPING $N"
+        echo -e "$(date "+%Y-%m-%d %H:%M:%S") | dependencies not available .... $Y SKIPPING $N"
     fi
 
 }
@@ -88,8 +88,12 @@ sed_setup(){
 }
 
 systemd_setup(){
-    cp $SCRIPT_DIR/$app_name.service /etc/systemd/system/$app_name.service &>>$LOGS_FILE
-    VALIDATE $? "Created systemctl service"
+    if command -v node &>/dev/null; then
+        cp $SCRIPT_DIR/$app_name.service /etc/systemd/system/$app_name.service &>>$LOGS_FILE
+        VALIDATE $? "Created systemctl service"
+    else 
+           echo -e "$(date "+%Y-%m-%d %H:%M:%S") | systemctl services not required  .... $Y SKIPPING $N"
+    fi
 
     systemctl daemon-reload
     systemctl enable $app_name &>>$LOGS_FILE
