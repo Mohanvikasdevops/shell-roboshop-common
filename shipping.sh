@@ -4,18 +4,8 @@ source ./common.sh
 app_name=shipping
 
 check_root
-
-dnf install maven -y &>>$LOGS_FILE
-VALIDATE $? " Installed Maven"
-
+java_setup
 app_setup
-
-cd /app 
-mvn clean package 
-VALIDATE $? "Installing and Building shipping"
-
-mv target/shipping-1.0.jar shipping.jar
-VALIDATE $? "Moving and Renaming shipping" 
 
 dnf install mysql -y &>>$LOGS_FILE
 VALIDATE $? "Installing MySQL"
