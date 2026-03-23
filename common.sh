@@ -109,8 +109,8 @@ systemd_setup(){
 }
 
 app_restart(){    
-    systemctl restart catalogue &>>$LOGS_FILE
-    VALIDATE $? "Restarting catalogue"
+    systemctl restart $app_name &>>$LOGS_FILE
+    VALIDATE $? "Restarting $app_name"
 }
 
 print_total_time(){
