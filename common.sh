@@ -45,8 +45,8 @@ app_code_setup(){
     dnf install $app_code -y &>>$LOGS_FILE
     VALIDATE $? "Installing $app_code"
 
-    id nodejs &>>$LOGS_FILE 
-    if [ $? -ne 0 ]; then
+    
+    if command -v node &>/dev/null; then
         npm install &>>$LOGS_FILE
         VALIDATE $? "Installing dependencies"
     else
