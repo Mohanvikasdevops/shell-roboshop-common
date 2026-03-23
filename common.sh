@@ -48,6 +48,7 @@ app_code_setup(){
     
     if command -v node &>/dev/null; then
         cd /app
+        ls -l package.json &>>$LOGS_FILE
         npm install &>>$LOGS_FILE
         VALIDATE $? "Installing dependencies"
     else
