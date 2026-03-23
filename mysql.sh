@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source ./common.sh
-app_name=mysql
+app_name=mysqld
 
 check_root
 
