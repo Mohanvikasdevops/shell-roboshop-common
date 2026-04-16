@@ -101,6 +101,15 @@ java_setup(){
     VALIDATE $? "Moving and Renaming $app_name" 
 }
 
+python_setup(){
+    dnf install python3 gcc python3-devel -y &>>$LOGS_FILE
+    VALIDATE $? "Installing Python"
+
+    cd /app 
+    pip3 install -r requirements.txt &>>$LOGS_FILE
+    VALIDATE $? "Installing dependecies"
+}
+
 sed_setup(){
     sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/$app_name/$app_name.conf &>>$LOGS_FILE
     VALIDATE $? "Allowing remote connections"
