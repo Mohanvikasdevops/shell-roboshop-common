@@ -3,6 +3,7 @@
 USERID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
 LOGS_FILE="$LOGS_FOLDER/$0.log"
+app_dir=/usr/share/nginx/html
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
